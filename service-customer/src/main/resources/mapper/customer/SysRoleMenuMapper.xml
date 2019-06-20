@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgy.customer.dao.SysRoleMenuDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        role_id, menu_id
+    </sql>
+
+    <!-- 查询该菜单哪些角色在使用 -->
+    <select id="hasRoleByMenuId">
+        select DISTINCT(b.role_name ) as roleName from sys_role_menu a left join sys_role b on a.role_id= b.role_id where a.menu_id=#{menuId} GROUP BY a.role_id
+    </select>
+
+    <select id="deleteByRoleId" parameterType="java.lang.Integer">
+        delete from sys_role_menu where role_id = #{roleId}
+    </select>
+
+    <select id="batchInsert" parameterType="java.util.List" resultType="java.lang.Integer">
+        insert into sys_role_menu (menu_id,role_id) values
+        <foreach collection="menuIds" item="menuId" separator=",">
+           (#{menuId},#{roleId})
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgy.customer.dao.SysOperatorDao">
+
+
+    <select id="queryOperatorPermission" parameterType="java.util.HashMap" resultType="java.lang.String">
+        SELECT DISTINCT m.permission FROM sys_operator_role opr, sys_role_menu rm, sys_menu m  WHERE opr.op_id = #{opId}  AND opr.role_id = rm.role_id
+        AND rm.menu_id = m.menu_id
+        AND m.menu_type = #{menuType}
+        AND m.menu_state = #{menuState}
+    </select>
+
+    <select id="getPage" resultType="com.pgy.customer.entity.resp.OperatorResp">
+        SELECT op_id, login_name, real_name, operator_state,  last_login_ip, last_login_time from  sys_operator
+        WHERE is_delete = 0
+        <if test="req.loginName!=null and req.loginName!=''">
+            and login_name=#{req.loginName}
+        </if>
+        <if test="req.realName!=null and req.realName!=''">
+            and real_name=#{req.realName}
+        </if>
+         order by op_id desc
+    </select>
+
+    <select id="hasOperator" resultType="java.lang.Integer" parameterType="com.pgy.customer.entity.req.save.OperatorSaveReq">
+        select count(*) from sys_operator where is_delete = 0 and login_name = #{req.loginName}
+        <if test="req.opId!=null">
+            and op_id &lt;&gt; #{req.opId}
+        </if>
+    </select>
+
+    <select id="getByOpId" resultType="com.pgy.customer.entity.resp.OperatorResp" parameterType="java.lang.Integer">
+        select * from sys_operator where is_delete = 0 and op_id = #{opId} limit 1
+    </select>
+</mapper>

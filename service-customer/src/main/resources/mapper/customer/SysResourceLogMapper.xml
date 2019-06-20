@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgy.customer.dao.SysResourceLogDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, res_type, res_type_sec, old_json, modify_json, add_operator_id, add_time
+    </sql>
+
+    <select id="getPage" resultType="com.pgy.customer.entity.SysResourceLog">
+        select * from sys_resource_log where 1 = 1
+        <if test="query.resType!=null and query.resType!=''">
+            and res_type like CONCAT('%',#{query.resType},'%')
+        </if>
+        <if test="query.resType!=null and query.resType!=''">
+            and res_type_sec like CONCAT('%',#{query.resType},'%')
+        </if>
+        order by id desc
+    </select>
+</mapper>

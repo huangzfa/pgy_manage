@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgy.customer.dao.SysRoleDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        role_id, role_name, role_type, role_state, role, is_delete, modify_operator_id, add_time, add_operator_id, modify_time
+    </sql>
+
+    <select id="getByOpId" resultType="com.pgy.customer.entity.SysRole" parameterType="java.lang.Integer">
+        select a.* from sys_role a left join sys_operator_role b on a.role_id=b.role_id where a.is_delete = 0 and a.role_state=1 and  b.op_id=#{opId} group by a.role_id
+    </select>
+
+    <!-- 自定义分页查询 -->
+    <select id="getPage" resultType="com.pgy.customer.entity.resp.RoleResp" >
+        select role_id, role_name, role_type, role_state, role from sys_role
+        where is_delete = 0
+        <if test="req.roleName!=null and req.roleName!=''">
+            and role_name=#{req.roleName}
+        </if>
+        order by role_id desc
+    </select>
+
+    <select id="hasByRole" resultType="java.lang.Integer" parameterType="com.pgy.customer.entity.req.save.RoleSaveReq">
+        select count(*) from sys_role where is_delete = 0 and role=#{req.role}
+        <if test="req.roleId!=null">
+            and role_id &lt;&gt; #{req.roleId}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgy.customer.dao.SysMenuDao">
+
+
+    <!-- 查询一个用户拥有的所有角色菜单 -->
+    <select id="getByRoleIds" resultType="com.pgy.customer.entity.SysMenu" parameterType="java.util.List">
+        SELECT DISTINCT(a.menu_id),a.* from sys_menu a left join sys_role_menu b on a.menu_id=b.menu_id
+        where a.is_delete = 0 and b.role_id
+        <foreach collection="roleIds" open=" in(" close=")" separator="," item="roleId">
+            #{roleId}
+        </foreach>
+        order by parent_id asc,menu_sort asc
+    </select>
+
+    <select id="getAll" resultType="com.pgy.customer.entity.SysMenu">
+        SELECT * from sys_menu where is_delete = 0 order by parent_id asc,menu_sort asc;
+    </select>
+
+    <!--查询该菜单下面是否有子菜单-->
+    <select id="hasChildren" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select count(*) from sys_menu where is_delete = 0 and parent_id=#{menuId}
+    </select>
+
+    <!--根据父id查询菜单，且is_parent = 0;-->
+    <select id="getByParentId" resultType="com.pgy.customer.entity.SysMenu" parameterType="java.lang.Integer">
+        select menu_id,is_parent from sys_menu where is_delete =0 and menu_id=#{parentId} and is_parent = 0
+    </select>
+</mapper>

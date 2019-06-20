@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgy.customer.dao.SysResourceDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, res_type, res_type_sec, remark, int_value, long_value, string_value, string_value1, string_value2, decimal_value, add_time, modify_time, add_operator_id, modify_operator_id, is_delete
+    </sql>
+
+    <select id="getPage" resultType="com.pgy.customer.entity.SysResource">
+        select * from sys_resource where is_delete = 0
+        <if test="query.name!=null and query.name!=''">
+            and name like CONCAT('%',#{query.name},'%')
+        </if>
+        order by id desc
+    </select>
+
+    <select id="hasType" resultType="java.lang.Integer" parameterType="com.pgy.customer.entity.req.save.ResourceSaveReq">
+        select count(*) from sys_resource where is_delete = 0 and res_type=#{resType}
+        <if test="resTypeSec!=null and resTypeSec!=''">
+            and res_type_sec = #{resTypeSec}
+        </if>
+        <if test="id!=null and id!=''">
+            and id &lt;&gt; #{id}
+        </if>
+    </select>
+</mapper>

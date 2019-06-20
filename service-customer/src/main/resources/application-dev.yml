@@ -1,0 +1,34 @@
+spring:
+  #配置数据源
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/sys_manage?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: system
+  redis:
+       host: 116.62.143.57
+       port: 6379
+       password: mqfq123456
+       pool:
+         max-active: 100
+         max-idle: 10
+         max-wait: 100000
+         timeout: 0
+hayek:
+  shiro:
+    # shiro redis缓存时长，默认1800秒
+    expireIn: 1800
+    # session 超时时间，默认1800000毫秒(30min)
+    sessionTimeout: 1800000
+    # rememberMe cookie有效时长，默认30天
+    cookieTimeout: 2592000
+    # sys下面所有路径认证
+    authc : /sys/**
+    # 登录成功后跳转的 url
+    successUrl:
+    # 登出 url
+    logoutUrl:
+    # 未授权跳转 url
+    unauthorizedUrl:
+    # session的id名称
+    sessionIdName: hayek.session.id
+
