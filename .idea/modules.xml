@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/pgy-manage.iml" filepath="$PROJECT_DIR$/pgy-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service-common/service-common.iml" filepath="$PROJECT_DIR$/service-common/service-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service-customer/service-customer.iml" filepath="$PROJECT_DIR$/service-customer/service-customer.iml" />
+    </modules>
+  </component>
+</project>
