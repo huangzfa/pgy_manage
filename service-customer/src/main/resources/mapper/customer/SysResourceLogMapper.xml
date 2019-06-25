@@ -7,7 +7,7 @@
         id, res_type, res_type_sec, old_json, modify_json, add_operator_id, add_time
     </sql>
 
-    <select id="getPage" resultType="com.pgy.customer.entity.SysResourceLog">
+    <select id="getPage" resultType="com.pgy.customer.entity.resp.ResourceLogResp">
         select * from sys_resource_log where 1 = 1
         <if test="query.resType!=null and query.resType!=''">
             and res_type like CONCAT('%',#{query.resType},'%')

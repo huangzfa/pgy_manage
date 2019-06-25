@@ -46,7 +46,7 @@ public class SysMenuController extends BaseController{
     @RespParamHandler
     @PostMapping(value = "/operatorPermissionList")
     public Object operatorPermissionList()  {
-        return menuService.getByOpId(getCredential());
+        return menuService.getPermissionByOpId(getCredential());
     }
 
     /**

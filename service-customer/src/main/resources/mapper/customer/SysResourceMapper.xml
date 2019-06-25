@@ -7,7 +7,7 @@
         id, name, res_type, res_type_sec, remark, int_value, long_value, string_value, string_value1, string_value2, decimal_value, add_time, modify_time, add_operator_id, modify_operator_id, is_delete
     </sql>
 
-    <select id="getPage" resultType="com.pgy.customer.entity.SysResource">
+    <select id="getPage" resultType="com.pgy.customer.entity.resp.ResourceResp">
         select * from sys_resource where is_delete = 0
         <if test="query.name!=null and query.name!=''">
             and name like CONCAT('%',#{query.name},'%')

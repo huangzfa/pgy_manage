@@ -9,6 +9,7 @@ import com.pgy.common.dic.ZD;
 import com.pgy.common.enums.RespEnum;
 import com.pgy.common.exception.RetMsgException;
 import com.pgy.customer.dao.SysMenuDao;
+import com.pgy.customer.dao.SysOperatorDao;
 import com.pgy.customer.dao.SysRoleDao;
 import com.pgy.customer.dao.SysRoleMenuDao;
 import com.pgy.customer.entity.SysMenu;
@@ -22,8 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +43,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
     private SysRoleDao roleDao;
     @Autowired
     private SysRoleMenuDao roleMenuDao;
+    @Autowired
+    private SysOperatorDao operatorDao;
 
     @Override
     public List<SysMenu> getAll() {
@@ -69,6 +71,34 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
         }
         JSONObject object = new JSONObject();
         object.put("list", getMenuList(menuList, Consts.INT_ZERO));
+        return object;
+    }
+
+    /**
+     * 查询登录后用户的所拥有的权限
+     * @param credential
+     * @return
+     */
+    @Override
+    public JSONObject getPermissionByOpId(OperatorCredential credential){
+        HashMap<String,Object> param = new HashMap<>();
+        Set<String> pers = null;
+        //超级管理员有所有权限
+        if( credential.isSuperAdmin()){
+            pers = menuDao.queryAllPermission();
+        }else{
+            param.put("opId",credential.getOpId());
+            param.put("menuType", ZD.menuType_mo);
+            param.put("menuState",ZD.dataState_valid);
+            pers = operatorDao.queryOperatorPermission(param);
+        }
+        param = new HashMap<>();
+        Iterator<String> it = pers.iterator();
+        while (it.hasNext()) {
+            param.put(it.next(),true);
+        }
+        JSONObject object = new JSONObject();
+        object.put("list",param);
         return object;
     }
 

@@ -53,11 +53,11 @@ public class RedisConfigurtion {
      * 加载缓存
      * @return
      */
-    /*@Bean
+    @Bean
     @Qualifier("cache")
     public Cache getCache() {
         return new CacheRedisImpl();
-    }*/
+    }
     /**
      * 加载分布式锁框架redisson
      * @return

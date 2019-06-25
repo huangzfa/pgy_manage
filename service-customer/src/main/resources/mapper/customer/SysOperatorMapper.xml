@@ -4,14 +4,14 @@
 
 
     <select id="queryOperatorPermission" parameterType="java.util.HashMap" resultType="java.lang.String">
-        SELECT DISTINCT m.permission FROM sys_operator_role opr, sys_role_menu rm, sys_menu m  WHERE opr.op_id = #{opId}  AND opr.role_id = rm.role_id
+        SELECT DISTINCT m.permission FROM sys_operator_role opr, sys_role_menu rm, sys_menu m  WHERE opr.op_id = #{opId} and opr.role_id = rm.role_id
         AND rm.menu_id = m.menu_id
         AND m.menu_type = #{menuType}
         AND m.menu_state = #{menuState}
     </select>
 
     <select id="getPage" resultType="com.pgy.customer.entity.resp.OperatorResp">
-        SELECT op_id, login_name, real_name, operator_state,  last_login_ip, last_login_time from  sys_operator
+        SELECT op_id, login_name, real_name, operator_state,  last_login_ip, date_format(last_login_time, '%Y-%m-%d %H:%i:%s') as last_login_time from  sys_operator
         WHERE is_delete = 0
         <if test="req.loginName!=null and req.loginName!=''">
             and login_name=#{req.loginName}

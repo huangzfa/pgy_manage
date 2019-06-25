@@ -53,7 +53,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             throws AuthenticationException {
         // 通过登录账号保存用户信息
         Subject subject = SecurityUtils.getSubject();
-        Session sessionLocal  = subject.getSession();
+        Session sessionLocal = subject.getSession();
         log.info("获取用户信息>>>>>>>>>>>>>>>>>>>>>doGetAuthenticationInfo:" + subject.getSession().getId());
         UsernamePasswordCaptchaToken token = (UsernamePasswordCaptchaToken) authcToken;
         String userName = (String) token.getPrincipal();
@@ -62,19 +62,17 @@ public class MyShiroRealm extends AuthorizingRealm {
             throw new UnknownAccountException();// 没找到帐号
         }
         List<SysRole> roleList = roleService.getList(operator.getOpId());
-        OperatorCredential credential = UserHelper.createCredential(operator,roleList);
+        OperatorCredential credential = UserHelper.createCredential(operator, roleList);
         // 获取session并设置sessionId
         credential.setSessionId(sessionLocal.getId());
-
         String pwd = "";
         //使用短信验证码登录
         SysSmsRecord smsVC = smsRecordService.queryLastSmsVerifyCode(userName, ZD.smsType_login);
         if (smsVC != null && System.currentTimeMillis() <= smsVC.getInvalidTime().getTime()) {
             pwd = smsVC.getCode();
         }
-
         //使用密码登录
-        if(StringUtils.isBlank(pwd)){
+        if (StringUtils.isBlank(pwd)) {
             pwd = operator.getLoginPwd();
         }
         log.info("获取用户信息" + pwd + "===================>" + JSON.toJSONString(credential));

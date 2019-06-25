@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -18,6 +19,12 @@ import java.util.List;
 public interface SysMenuDao extends BaseMapper<SysMenu> {
 
     List<SysMenu> getAll();
+
+    /**
+     * 查询所有权限
+     * @return
+     */
+    Set<String> queryAllPermission();
 
     /**
      * 查询一个用户拥有的所有角色菜单

@@ -8,6 +8,7 @@ import com.pgy.customer.entity.credential.OperatorCredential;
 import com.pgy.customer.entity.req.save.MenuSaveReq;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -40,6 +41,12 @@ public interface ISysMenuService extends IService<SysMenu> {
      */
     JSONObject getByOpId(OperatorCredential credential);
 
+    /**
+     *
+     * @param credential
+     * @return
+     */
+    JSONObject getPermissionByOpId(OperatorCredential credential);
     /**
      * 系统管理->菜单列表
      * @return

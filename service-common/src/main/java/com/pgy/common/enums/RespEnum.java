@@ -14,8 +14,6 @@ public enum RespEnum {
 
     HANDLE_FAILED("1002", "业务处理失败!"),
 
-    DATA_MISS("3000", "参数缺失"),
-
     USER_ACCOUNT_NOT_EXIST("3001", "用户账号信息不存在"),
 
     USER_PAY_PWD_IS_ERROR("3002", "支付密码不正确请重新输入"),
@@ -48,7 +46,6 @@ public enum RespEnum {
     SERVICE_ERROR("5005", "服务繁忙, 请稍后再试!"),
 
     OPERATOR_NOAUTH("6000", "没有该操作权限"),
-
     ;
 
     private String code;

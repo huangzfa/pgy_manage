@@ -1,5 +1,6 @@
 package com.pgy.customer.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pgy.common.annotation.RespParamHandler;
 import com.pgy.common.dic.ZD;
 import com.pgy.common.enums.RespEnum;
@@ -79,16 +80,16 @@ public class LoginController extends BaseController{
     @RespParamHandler
     @PostMapping(value = "/login")
     public Object loginCode(@Valid @RequestBody OperatorLoginReq req) {
-        if(StringUtils.isBlank(req.getCode())){
-            new RetMsgException(RespEnum.PWD_SMS_GET_ERROR);
+        if (StringUtils.isBlank(req.getCode())) {
+            throw new RetMsgException(RespEnum.PWD_SMS_GET_ERROR);
         }
         SysOperator operator = operatorService.queryOperatorByLoginName(req.getPhone());
-        if( operator == null ){
-            new RetMsgException(RespEnum.USER_ACCOUNT_NOT_EXIST);
+        if (operator == null) {
+            throw new RetMsgException(RespEnum.USER_ACCOUNT_NOT_EXIST);
         }
         //账号被禁用
-        if( operator.getOperatorState().equals(ZD.dataState_invalid)){
-            new RetMsgException(RespEnum.USER_ACCOUNT_NOT_EXIST);
+        if (operator.getOperatorState().equals(ZD.dataState_invalid)) {
+            throw new RetMsgException(RespEnum.USER_ACCOUNT_NOT_EXIST);
         }
         //验证短信
         smsRecordService.checkVerifyCode(req, ZD.smsType_login);
@@ -108,7 +109,11 @@ public class LoginController extends BaseController{
         operatorService.updateOperatorForLogin(credential);
         // 记录日志
         operatorLoginLogService.save(credential,ZD.smsType_login);
-        return RespEnum.SUCCESS.getMsg();
+        JSONObject object = new JSONObject();
+        object.put("loginName",operator.getLoginName());
+        object.put("realName",operator.getRealName());
+        object.put("isSuperAdmin",credential.isSuperAdmin());
+        return object;
     }
 
     /**
@@ -133,5 +138,18 @@ public class LoginController extends BaseController{
                 }
             }
         }
+    }
+
+    /**
+     * 登出
+     * @return
+     */
+    @RespParamHandler
+    @PostMapping(value = "/logout")
+    public Object logout() {
+        Subject subject = SecurityUtils.getSubject();
+        operatorLoginLogService.save(getCredential(),ZD.smsType_login_out);
+        subject.logout();
+        return RespEnum.SUCCESS.getMsg();
     }
 }

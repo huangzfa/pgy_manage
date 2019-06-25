@@ -26,4 +26,9 @@
     <select id="getByParentId" resultType="com.pgy.customer.entity.SysMenu" parameterType="java.lang.Integer">
         select menu_id,is_parent from sys_menu where is_delete =0 and menu_id=#{parentId} and is_parent = 0
     </select>
+
+    <!-- 查询超级管理员所有权限 -->
+    <select id="queryAllPermission"  resultType="java.lang.String">
+        SELECT DISTINCT permission from sys_menu where is_delete = 0 and permission is not null
+    </select>
 </mapper>

@@ -1,9 +1,9 @@
 spring:
   #配置数据源
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/sys_manage?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://116.62.143.57:3306/pgy_manage?useUnicode=true&characterEncoding=utf8
     username: root
-    password: system
+    password: Hjn184736351
   redis:
        host: 116.62.143.57
        port: 6379
