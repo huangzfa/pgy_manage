@@ -35,12 +35,13 @@ public class CorsFilter implements Filter{
         if(httpRequest.getRequestURI().indexOf("login.jsp") > Consts.INT_ZERO){
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_OK);
+            response.setHeader("Content-type", "text/html;charset=UTF-8");
             res.setCharacterEncoding("UTF-8");
             PrintWriter writer = res.getWriter();
             Map<String, Object> map= new HashMap<>();
             map.put("code", RespEnum.NOT_LOGIN.getCode());
             map.put("msg", RespEnum.NOT_LOGIN.getMsg());
-            writer.write(JSON.toJSONString(map));
+            response.getWriter().print(JSON.toJSONString(map));
             writer.close();
             return;
         }

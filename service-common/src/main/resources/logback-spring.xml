@@ -7,15 +7,15 @@
 
     <!-- 日志路径 -->
     <springProperty scope="context" name="LOG_PATH" source="logging.path"
-                    defaultValue="/www/logs/"/>
+                    defaultValue="/logs/"/>
 
     <!-- 日志文件 -->
-    <property name="LOG_FILE" value="${LOG_PATH}${appName}/${appName}.%d{yyyy-MM-dd}.%i.log"/>
+    <property name="LOG_FILE" value="${LOG_PATH}${appName}/${appName}.%d{yyyy-MM-dd}.log"/>
 
     <!-- 生产环境配置 -->
     <springProfile name="prod">
-        <!-- 生产环境每小时生成一个文件 -->
-        <property name="LOG_FILE" value="${LOG_PATH}${appName}.%d{yyyy-MM-dd-HH}.%i.log"/>
+        <!-- 生产环境每天生成一个文件 -->
+        <property name="LOG_FILE" value="${LOG_PATH}${appName}.%d{yyyy-MM-dd}.log"/>
     </springProfile>
 
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />

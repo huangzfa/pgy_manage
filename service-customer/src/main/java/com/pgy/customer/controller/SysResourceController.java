@@ -69,7 +69,7 @@ public class SysResourceController extends BaseController{
 
     @RespParamHandler
     @PostMapping(value = "/log/list")
-    @RequiresPermissions("sys:resourceLog:list")
+    @RequiresPermissions("sys:resourceLog:view")
     public Object getLogList(@Valid @RequestBody ResourceQuery query)  {
         return resourceLogService.getPage(getCredential(),query);
     }
