@@ -23,4 +23,26 @@ public interface SysOperatorRoleDao extends BaseMapper<SysOperatorRole> {
      */
     List<OperatorRoleResp> getRoleByOpIds(@Param("opIds") List<Integer> opIds);
 
+    /**
+     * 根据用户di查询角色Id
+     * @param opId
+     * @return
+     */
+    List<SysOperatorRole> getByOpId(@Param("opId") Integer opId);
+
+    /**
+     * 删除绑定角色
+     * @param opId
+     * @return
+     */
+    Integer deleteByOpId(@Param("opId") Integer opId);
+
+    /**
+     * 批量写入
+     * @param roleIds
+     * @param opId
+     * @return
+     */
+    Integer batchInsert(@Param("roleIds") List<String> roleIds,@Param("opId") Integer opId);
+
 }

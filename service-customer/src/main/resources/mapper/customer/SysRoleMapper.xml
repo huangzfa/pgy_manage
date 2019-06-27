@@ -21,6 +21,16 @@
         order by role_id desc
     </select>
 
+    <!-- 查询所有角色不分页 -->
+    <select id="getAll" resultType="com.pgy.customer.entity.resp.RoleResp" >
+        select role_id, role_name from sys_role
+        where is_delete = 0
+        <if test="req.roleName!=null and req.roleName!=''">
+            and role_name=#{req.roleName}
+        </if>
+        order by role_id desc
+    </select>
+
     <select id="hasByRole" resultType="java.lang.Integer" parameterType="com.pgy.customer.entity.req.save.RoleSaveReq">
         select count(*) from sys_role where is_delete = 0 and role=#{req.role}
         <if test="req.roleId!=null">

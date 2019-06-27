@@ -12,4 +12,6 @@ public class OperatorRoleResp {
     private String roleName;
 
     private Integer opId;
+
+    private boolean checked;
 }

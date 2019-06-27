@@ -2,6 +2,7 @@ package com.pgy.customer.dao;
 
 import com.pgy.customer.entity.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pgy.customer.entity.req.save.MenuSaveReq;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -46,4 +47,11 @@ public interface SysMenuDao extends BaseMapper<SysMenu> {
      * @return
      */
     SysMenu getByParentId(@Param("parentId") Integer parentId);
+
+    /**
+     * 判断该权限标识是否存在
+     * @param menu
+     * @return
+     */
+    int hasPermission(@Param("req") MenuSaveReq menu);
 }

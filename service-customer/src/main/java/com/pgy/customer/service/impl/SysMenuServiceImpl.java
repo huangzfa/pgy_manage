@@ -152,26 +152,41 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
      */
     @Override
     @Transactional(rollbackFor=Exception.class)
-    public String save(MenuSaveReq menu, OperatorCredential credential){
-        if( menu.getMenuType().equals(ZD.menuType_mo) && StringUtils.isBlank(menu.getPermission())){
-            throw new RetMsgException(RespEnum.DEFINE_MSG.getCode(), "权限项菜单权限标识不能为空");
+    public String save(MenuSaveReq menu, OperatorCredential credential) {
+        if (menu.getMenuType().equals(ZD.menuType_mo)) {
+            if (StringUtils.isBlank(menu.getPermission())) {
+                throw new RetMsgException(RespEnum.DEFINE_MSG.getCode(), "权限项菜单权限标识不能为空");
+            }
+            if (menuDao.hasPermission(menu) > Consts.INT_ZERO) {
+                throw new RetMsgException(RespEnum.DEFINE_MSG.getCode(), "该权限标识已存在");
+            }
+        } else {
+            //非权限项不能填写
+            if (!StringUtils.isBlank(menu.getPermission())) {
+                throw new RetMsgException(RespEnum.DEFINE_MSG.getCode(), "菜单类型不得填写权限标识");
+            }
+        }
+        SysMenu parent = menuDao.selectOne(new QueryWrapper<SysMenu>()
+                .eq(SysMenu.IS_DELETE, Consts.INT_ZERO)
+                .eq(SysMenu.MENU_ID, menu.getParentId()));
+        if (parent == null) {
+            throw new RetMsgException(RespEnum.DEFINE_MSG.getCode(), "指定的父级菜单不存在");
+        }
+        if (parent.getMenuType().equals(ZD.menuType_mo)) {
+            throw new RetMsgException(RespEnum.DEFINE_MSG.getCode(), "权限项菜单不能添加子菜单");
         }
         SysMenu entity = new SysMenu();
-        BeanUtils.copyProperties(menu,entity);
-        if( entity.getMenuId() == null ){
-            if( entity.getParentId() == null ){
-                throw new RetMsgException(RespEnum.DEFINE_MSG.getCode(), "请指定父级菜单");
-            }
+        BeanUtils.copyProperties(menu, entity);
+        if (entity.getMenuId() == null) {
             entity.setAddOperatorId(credential.getOpId());
             menuDao.insert(entity);
-        }else{
+        } else {
             entity.setModifyOperatorId(credential.getOpId());
             entity.setModifyTime(new Date());
             menuDao.updateById(entity);
         }
         //上级父菜单设置is_parent =1
-        SysMenu parent = menuDao.getByParentId(entity.getParentId());
-        if( parent!=null ){
+        if (parent.getIsParent().equals(Consts.INT_ZERO)) {
             parent.setIsParent(Consts.INT_ONE);
             menuDao.updateById(parent);
         }
@@ -215,9 +230,19 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
      */
     @Override
     public SysMenu getByMenuId(Integer menuId){
-        return menuDao.selectOne(new QueryWrapper<SysMenu>()
+        SysMenu menu = menuDao.selectOne(new QueryWrapper<SysMenu>()
                 .eq(SysMenu.IS_DELETE,Consts.INT_ZERO)
                 .eq(SysMenu.MENU_ID,menuId));
+        //返回该菜单的父级菜单名称
+        if( menu!=null ){
+            SysMenu parentMenu = menuDao.selectOne(new QueryWrapper<SysMenu>()
+                    .eq(SysMenu.IS_DELETE,Consts.INT_ZERO)
+                    .eq(SysMenu.MENU_ID,menu.getParentId()));
+            if( parentMenu!=null ){
+                menu.setParentName(parentMenu.getMenuName());
+            }
+        }
+        return menu;
     }
     /**
      * 获取子节点（包括菜单和权限菜单）
@@ -231,13 +256,23 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
         for (SysMenu menu : menuList) {
             if (parentId.equals(menu.getParentId())) {
                 JSONObject object = new JSONObject();
+
                 object.put("id", menu.getMenuId());
                 object.put("name", menu.getMenuName());
                 object.put("pId", menu.getParentId());
                 object.put("menuSort", menu.getMenuSort());
                 object.put("permission", menu.getPermission());
+                object.put("menuState", menu.getMenuState());
+                object.put("menuIcon",menu.getMenuIcon());
                 object.put("url", menu.getMenuUrl());
                 object.put("menuState", menu.getMenuState());
+                Optional<SysMenu> cartOptional = menuList.stream().filter(item -> item.getMenuId().equals(parentId)).findFirst();
+                if (cartOptional.isPresent()) {
+                    // 存在
+                    object.put("pName", cartOptional.get().getMenuName());
+                }else {
+                    object.put("pName", null);
+                }
                 if (menu.getMenuType().equals(ZD.menuType_m)) {
                     object.put("menuType", "菜单");
                 } else {

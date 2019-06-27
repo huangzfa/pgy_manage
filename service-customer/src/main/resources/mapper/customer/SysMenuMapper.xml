@@ -31,4 +31,12 @@
     <select id="queryAllPermission"  resultType="java.lang.String">
         SELECT DISTINCT permission from sys_menu where is_delete = 0 and permission is not null
     </select>
+
+    <!--  判断该权限标识是否已存在 -->
+    <select id="hasPermission" resultType="java.lang.Integer" parameterType="com.pgy.customer.entity.req.save.MenuSaveReq">
+        SELECT count(*) from sys_menu where is_delete = 0 and permission=#{req.permission}
+        <if test="req.menuId!=null">
+            and menu_id &lt;&gt; #{req.menuId}
+        </if>
+    </select>
 </mapper>

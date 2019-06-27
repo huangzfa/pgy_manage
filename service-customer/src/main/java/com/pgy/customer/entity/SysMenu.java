@@ -1,6 +1,7 @@
 package com.pgy.customer.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
@@ -99,6 +100,12 @@ public class SysMenu extends Model<SysMenu> {
      * !0删除
      */
     private Integer isDelete;
+
+    /** 非数据库字段
+     * 父级菜单名称
+     */
+    @TableField(exist = false)
+    private String parentName;
 
 
     public static final String MENU_ID = "menu_id";

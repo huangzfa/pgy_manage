@@ -29,6 +29,8 @@ public interface SysRoleDao extends BaseMapper<SysRole> {
 
     IPage<RoleResp> getPage(@Param("page") Page<RoleResp> page, @Param("req") RoleQuery req);
 
+    List<RoleResp> getAll(@Param("req") RoleQuery req);
+
     /**
      * 判断次角色是否已经存在
      * @param req

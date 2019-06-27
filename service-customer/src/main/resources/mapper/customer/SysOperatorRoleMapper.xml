@@ -10,4 +10,21 @@
         </foreach>
         group by a.op_id
     </select>
+
+    <select id="getByOpId"  resultType="com.pgy.customer.entity.SysOperatorRole" parameterType="java.lang.Integer">
+        select * from sys_operator_role  where op_id=#{opId}
+    </select>
+
+    <!-- 根据员工id删除所有角色 -->
+    <select id="deleteByOpId"  parameterType="java.lang.Integer">
+        delete from sys_operator_role  where op_id=#{opId}
+    </select>
+
+    <!-- 根据员工id批量写入角色 -->
+    <select id="batchInsert" parameterType="java.util.List" resultType="java.lang.Integer">
+        insert into sys_operator_role (role_id,op_id) values
+        <foreach collection="roleIds" item="roleId" separator=",">
+            (#{roleId},#{opId})
+        </foreach>
+    </select>
 </mapper>

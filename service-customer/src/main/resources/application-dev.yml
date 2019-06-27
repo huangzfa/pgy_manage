@@ -19,12 +19,13 @@ spring:
            min-idle: 1
            #连接池最大阻塞等待时间（使用负值表示没有限制）
            max-wait: 100000
+       # 超时时间 ms
        timeout: 10000
 
 hayek:
   shiro:
-    # shiro redis缓存时长，默认1800秒
-    expireIn: 1800
+    # shiro redis缓存时长，默认30min
+    expireIn: 1800000
     # session 超时时间，默认1800000毫秒(30min)
     sessionTimeout: 1800000
     # rememberMe cookie有效时长，默认30天
