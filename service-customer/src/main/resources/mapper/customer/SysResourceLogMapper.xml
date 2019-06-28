@@ -10,10 +10,7 @@
     <select id="getPage" resultType="com.pgy.customer.entity.resp.ResourceLogResp">
         select * from sys_resource_log where 1 = 1
         <if test="query.resType!=null and query.resType!=''">
-            and res_type like CONCAT('%',#{query.resType},'%')
-        </if>
-        <if test="query.resType!=null and query.resType!=''">
-            and res_type_sec like CONCAT('%',#{query.resType},'%')
+            and (res_type like CONCAT('%',#{query.resType},'%') or res_type_sec like CONCAT('%',#{query.resType},'%'))
         </if>
         order by id desc
     </select>

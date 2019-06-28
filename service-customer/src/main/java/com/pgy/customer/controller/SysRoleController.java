@@ -71,14 +71,14 @@ public class SysRoleController extends BaseController{
 
     /**
      * 角色删除
-     * @param reqParam
+     * @param query
      * @return
      */
     @RespParamHandler
     @PostMapping(value = "/delete")
     @RequiresPermissions("sys:role:delete")
-    public Object delete(@Valid @RequestBody RoleSaveReq reqParam) {
-        return roleService.delete(getCredential(),reqParam.getRoleId());
+    public Object delete(@Valid @RequestBody RoleQuery query) {
+        return roleService.delete(getCredential(),query.getRoleId());
     }
 }
 

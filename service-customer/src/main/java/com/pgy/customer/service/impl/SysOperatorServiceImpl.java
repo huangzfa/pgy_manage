@@ -193,6 +193,7 @@ public class SysOperatorServiceImpl extends ServiceImpl<SysOperatorDao, SysOpera
                 .setModifyOperatorId(credential.getOpId())
                 .setOpId(opId);
         operatorDao.updateById(record);
+        operatorRoleDao.deleteByOpId(opId);
         return RespEnum.SUCCESS.getCode();
     }
 }

@@ -142,8 +142,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceDao, SysResou
                             .setResType(resource.getResType())
                             .setResTypeSec(resource.getResTypeSec())
                             .setOldJson(JSON.toJSONString(resource))
-                            .setModifyJson(JSON.toJSONString(resource))
-                            .setAddOperatorId(resource.getModifyOperatorId());
+                            .setAddOperatorId(credential.getOpId())
+                            .setModifyJson(JSON.toJSONString(resource));
                     resourceLogDao.insert(log);
                 } catch (Exception e) {
                     status.setRollbackOnly();
